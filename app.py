@@ -2,7 +2,9 @@ from pandas import Period
 import streamlit as st
 import yfinance as yf
 
-st.title("A Squadra piacciono i soldi")
+st.title("A Tutti piacciono i soldi")
+
+desired_money = st.slider("Quanti soldi vuoi?", 2, 5002, 2000)
 
 msft = yf.Ticker("MSFT")
 
