@@ -14,9 +14,8 @@ desired_money = st.slider("Quanti soldi vuoi?", 2, 5002, 2000)
 
 #hist_data = msft.history(period='5y')
 
-days = st.slider("Quanti giorni vuoi guardare?", 1, 300, 300)
-end = dt.datetime.now()
-start = end - dt.timedelta(days=days)
+start = st.date_input("Enter start date", dt.date(2022, 1, 1))
+end = st.date_input("Enter end date", dt.datetime.now().date())
 
 value = yf.download('BTC', start, end)
 
