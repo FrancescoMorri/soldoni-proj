@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 yfinance = "*"
+streamlit = "*"
+twint = {editable = true, git = "https://github.com/twintproject/twint.git"}
 
 [dev-packages]
 
