@@ -6,7 +6,8 @@ name = "pypi"
 [packages]
 yfinance = "*"
 streamlit = "*"
-twint = {editable = true, git = "https://github.com/twintproject/twint.git"}
+twint = {git = "https://github.com/twintproject/twint.git"}
+matplotlib = "*"
 
 [dev-packages]
 
