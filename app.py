@@ -1,7 +1,11 @@
-from pandas import Period
+#!/usr/bin/env
+
+import pandas as pd
 import streamlit as st
 import yfinance as yf
 import twint as tw
+import datetime as dt
+
 
 def get_tweets(date, keyword, likes):
     c = tw.Config()
@@ -12,6 +16,7 @@ def get_tweets(date, keyword, likes):
     c.Until = str(date)+" 23:59:59"
     c.Pandas = True
     tw.run.Search(c)
+
 
 
 
@@ -39,8 +44,16 @@ if submitted:
 
 #desired_money = st.slider("Quanti soldi vuoi?", 2, 5002, 2000)
 
+
 #msft = yf.Ticker("MSFT")
 
 #hist_data = msft.history(period='5y')
 
-#st.table(hist_data)
+start = st.date_input("Enter start date", dt.date(2022, 1, 1))
+end = st.date_input("Enter end date", dt.datetime.now().date())
+
+value = yf.download('BTC', start, end)
+
+value['Mean'] = value[['High', 'Low']].mean(axis=1)
+st.write(value)
+st.line_chart(data=value['Mean'], width=0, height=0, use_container_width=True)
