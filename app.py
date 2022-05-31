@@ -6,6 +6,7 @@ import yfinance as yf
 import twint as tw
 import datetime as dt
 import matplotlib.pyplot as plt
+import altair as alt
 
 
 def get_tweets(date, keyword, likes):
@@ -47,21 +48,29 @@ if submitted:
         else:
             tmp.append([day.date(),len(tweets_df['tweet'])])
         
-    twittosity = pd.DataFrame(tmp, columns=['date','n_tweet'])
+    source = pd.DataFrame(tmp, columns=['date','n_tweet'])
 
     value = yf.download('BTC-EUR', start, end)
 
-    value['Mean'] = value[['High', 'Low']].mean(axis=1)
+    source['Mean'] = list(value[['High', 'Low']].mean(axis=1))
     
-    plt.rcParams["figure.figsize"] = [7.00, 3.50]
-    plt.rcParams["figure.autolayout"] = True
-    fig, ax1 = plt.subplots()
-    ax1.plot(value['Mean'], color='red')
-    ax1.xaxis.set_major_locator(plt.MaxNLocator(5))
-    ax2 = ax1.twinx()
-    ax2.plot(twittosity['date'], twittosity['n_tweet'], color='blue')
-    ax2.xaxis.set_major_locator(plt.MaxNLocator(5))
-    fig.tight_layout()
     
 
-    st.pyplot(fig)
+    base = alt.Chart(source).encode(
+        x=alt.X('date', axis=alt.Axis(title="Date"))
+    )
+
+    twit = base.mark_line(stroke='blue').encode(
+        y=alt.Y('n_tweet', axis=alt.Axis(title="Number of tweets per day"))
+    )
+
+    money = base.mark_line(stroke='green').encode(
+        y=alt.Y('Mean', axis=alt.Axis(title="BTC-EUR"))
+    )
+
+    g = alt.layer(twit, money).resolve_scale(
+        y='independent'
+    ).interactive()
+
+    st.altair_chart(g, use_container_width=True)
+
