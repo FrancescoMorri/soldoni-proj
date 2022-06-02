@@ -8,6 +8,7 @@ yfinance = "*"
 streamlit = "*"
 twint = {git = "https://github.com/twintproject/twint.git"}
 matplotlib = "*"
+altair = "*"
 
 [dev-packages]
 
