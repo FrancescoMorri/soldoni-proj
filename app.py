@@ -19,6 +19,12 @@ def get_tweets(date, keyword, likes):
     c.Pandas = True
     tw.run.Search(c)
 
+def get_money(name, start, end):
+    start = start + dt.timedelta(days=1)
+    end = end + dt.timedelta(days=1)
+    tick = yf.Ticker(name)
+    value = tick.history(start=start, end=end, interval="1d")
+    return value
 
 
 
@@ -50,22 +56,20 @@ if submitted:
         
     source = pd.DataFrame(tmp, columns=['date','n_tweet'])
 
-    value = yf.download('BTC-EUR', start, end)
-
+    value = get_money("BTC-EUR", start, end)
+    
     source['Mean'] = list(value[['High', 'Low']].mean(axis=1))
-    
-    
 
     base = alt.Chart(source).encode(
         x=alt.X('date', axis=alt.Axis(title="Date"))
     )
 
-    twit = base.mark_line(stroke='blue').encode(
-        y=alt.Y('n_tweet', axis=alt.Axis(title="Number of tweets per day"))
+    twit = base.mark_line(stroke='#5276A7').encode(
+        y=alt.Y('n_tweet', axis=alt.Axis(title="Number of tweets per day", titleColor='#5276A7'))
     )
 
-    money = base.mark_line(stroke='green').encode(
-        y=alt.Y('Mean', axis=alt.Axis(title="BTC-EUR"))
+    money = base.mark_line(stroke='#57A44C').encode(
+        y=alt.Y('Mean', axis=alt.Axis(title="BTC-EUR", titleColor='#57A44C'))
     )
 
     g = alt.layer(twit, money).resolve_scale(
